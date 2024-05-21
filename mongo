@@ -1,0 +1,97 @@
+To query a car document from a MongoDB collection and include the details of its similar models, you can use the MongoDB aggregation framework. The aggregation framework allows you to perform complex queries and transformations on the documents.
+
+Here’s how you can achieve this:
+
+1. **Match the car document you want to query.**
+2. **Use the `$lookup` stage to perform a left outer join with the same collection to fetch the details of the similar models.**
+3. **Unwind the `similar_models` array to lookup each ObjectId separately.**
+4. **Group the results back to combine the similar models into an array.**
+
+Here is an example query using the MongoDB aggregation framework:
+
+```javascript
+db.cars.aggregate([
+  {
+    // Match the specific car document
+    $match: { _id: ObjectId("your_car_id_here") }
+  },
+  {
+    // Lookup to join the collection with itself on similar_models field
+    $lookup: {
+      from: "cars",
+      localField: "similar_models",
+      foreignField: "_id",
+      as: "similar_models_details"
+    }
+  },
+  {
+    // Optionally, you can project the fields to include only the necessary ones
+    $project: {
+      _id: 1,
+      Manufacturer: 1,
+      Model: 1,
+      Year: 1,
+      Num_seats: 1,
+      similar_models: 1,
+      similar_models_details: 1
+    }
+  }
+])
+```
+
+### Explanation:
+
+1. **$match**: This stage filters the documents to return only the document with the specified `_id`.
+
+2. **$lookup**: This stage performs a left outer join with the `cars` collection itself. The `localField` is `similar_models` (the array of ObjectIds), and the `foreignField` is `_id` (the primary key of the documents). The resulting documents from the join are placed in the `similar_models_details` array.
+
+3. **$project**: This stage is optional and is used to include or exclude specific fields from the output. In this case, it includes the original fields and the joined `similar_models_details` array.
+
+Replace `your_car_id_here` with the actual ObjectId of the car document you want to query.
+
+### Example:
+If your `cars` collection has documents like this:
+
+```json
+{
+  "_id": ObjectId("60c72b2f9fd1c23d5c8f1e1a"),
+  "Manufacturer": "Toyota",
+  "Model": "Corolla",
+  "Year": 2020,
+  "Num_seats": 5,
+  "similar_models": [ObjectId("60c72b2f9fd1c23d5c8f1e1b"), ObjectId("60c72b2f9fd1c23d5c8f1e1c")]
+}
+```
+
+After running the aggregation query, the result will be:
+
+```json
+[
+  {
+    "_id": ObjectId("60c72b2f9fd1c23d5c8f1e1a"),
+    "Manufacturer": "Toyota",
+    "Model": "Corolla",
+    "Year": 2020,
+    "Num_seats": 5,
+    "similar_models": [ObjectId("60c72b2f9fd1c23d5c8f1e1b"), ObjectId("60c72b2f9fd1c23d5c8f1e1c")],
+    "similar_models_details": [
+      {
+        "_id": ObjectId("60c72b2f9fd1c23d5c8f1e1b"),
+        "Manufacturer": "Toyota",
+        "Model": "Camry",
+        "Year": 2019,
+        "Num_seats": 5
+      },
+      {
+        "_id": ObjectId("60c72b2f9fd1c23d5c8f1e1c"),
+        "Manufacturer": "Toyota",
+        "Model": "Prius",
+        "Year": 2021,
+        "Num_seats": 5
+      }
+    ]
+  }
+]
+```
+
+This result includes the details of the queried car and an array `similar_models_details` containing the details of the similar models.

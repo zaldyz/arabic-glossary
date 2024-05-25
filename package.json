@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "mongodb": "^6.6.2"
+  },
+  "name": "arabic-glossary",
+  "description": "",
+  "version": "1.0.0",
+  "main": "hash.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zaldyz/arabic-glossary.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zaldyz/arabic-glossary/issues"
+  },
+  "homepage": "https://github.com/zaldyz/arabic-glossary#readme"
+}

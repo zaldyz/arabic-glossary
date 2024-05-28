@@ -63,7 +63,7 @@ export default function RootLayout({ children }) {
                   <div>
                     <Input
                       type="search"
-                      placeholder="Search..."
+                      placeholder="Search for a Word..."
                       className="md:w-[100px] lg:w-[300px]"
                     />
                   </div>

@@ -2,6 +2,7 @@ import clientInstance from "@/lib/mongo";
 import react from "react";
 import { ModeToggle } from "@/components/mode_toggle";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 async function fetchWords() {
   let client = await clientInstance;
@@ -15,7 +16,9 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Button>Demo</Button>
+      <Button asChild>
+        <Link href="/admin/words">View Words</Link>
+      </Button>
       <div>
         {/* {words.map(word => {
                     return (<p key={word._id}>{word.pronounciation}</p>);

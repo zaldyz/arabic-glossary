@@ -1,20 +1,13 @@
-import { Payment, columns } from "./columns";
-import { DataTable } from "./data-table";
-import clientInstance from "@/lib/mongo";
+import { Suspense } from "react";
+import WordsLoading from "./words_loading";
+import WordsTable from "./admin_words_table";
 
-async function getWords() {
-  let client = await clientInstance;
-  let db = client.db("arabic-glossary");
-  let collection = db.collection("words");
-  return collection.find({}).toArray();
-}
-
-export default async function DemoPage() {
-  const words = await getWords();
-
+export default async function Page() {
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={words} />
+      <Suspense fallback={<WordsLoading />}>
+        <WordsTable />
+      </Suspense>
     </div>
   );
 }

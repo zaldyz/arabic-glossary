@@ -4,6 +4,7 @@ import "../styles/globals.css";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { ModeToggle } from "@/components/mode_toggle";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -74,6 +75,7 @@ export default function RootLayout({ children }) {
           </div>
           {children}
         </ThemeProvider>
+        <Toaster richColors />
       </body>
     </html>
   );

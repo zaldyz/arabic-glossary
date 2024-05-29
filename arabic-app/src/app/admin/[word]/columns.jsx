@@ -1,11 +1,12 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { MoreHorizontal } from "lucide-react";
+import { CirclePlus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Clipboard, OctagonX, Pencil } from "lucide-react";
 import Link from "next/link";
+import { Pencil } from "lucide-react";
+import { BookOpenCheck } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -16,6 +17,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { AddSimilarWordButton } from "./add_similar_word_button";
+import { AddRootWordButton } from "./add_root_word_button";
 // This type is used to define the shape of our data.
 // // You can use a Zod schema here if you want.
 // {
@@ -104,16 +107,6 @@ export const columns = [
     },
   },
   {
-    id: "similar_words",
-    accessorKey: "similar_words",
-    header: "Similar Words",
-  },
-  {
-    id: "root_word",
-    accessorKey: "root_word",
-    header: "Root Word",
-  },
-  {
     accessorKey: "tag",
     header: "Tags",
   },
@@ -128,29 +121,20 @@ export const columns = [
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
+              <CirclePlus className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(word.arabic)}
-              className="flex justify-between items-center hover:cursor-pointer"
-            >
-              Copy Arabic
-              <Clipboard className="h-3 w-3 ml-2" />
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
             <Link href={`/admin/${word._id}`} asChild>
               <DropdownMenuItem className="flex justify-between items-center hover:cursor-pointer">
                 Edit Word
                 <Pencil className="h-3 w-3 ml-2" />
               </DropdownMenuItem>
             </Link>
-            <DropdownMenuItem className="flex justify-between items-center text-red-600 hover:cursor-pointer focus:text-white focus:bg-red-500 dark:focus:bg-red-800/80">
-              Delete Word
-              <OctagonX className="h-3 w-3 ml-2" />
-            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <AddRootWordButton word_id={word._id} />
+            <AddSimilarWordButton word_id={word._id} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

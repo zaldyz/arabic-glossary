@@ -2,53 +2,80 @@
 
 import { revalidatePath } from "next/cache";
 import clientInstance from "@/lib/mongo";
+import { ObjectId } from "mongodb";
 
-export async function createTodo(prevState, formData) {
-  const schema = z.object({
-    todo: z.string().min(1),
-  });
-  const parse = schema.safeParse({
-    todo: formData.get("todo"),
-  });
-
-  if (!parse.success) {
-    return { message: "Failed to create todo" };
+export async function addSimilarWord(id, word_id) {
+  if (id === word_id) {
+    return {
+      success: false,
+      message: "A word cannot be added to its own similar words list",
+    };
   }
+  const client = await clientInstance;
+  const db = client.db("arabic-glossary");
+  const collection = db.collection("words");
 
-  const data = parse.data;
+  const bulkOperations = [
+    {
+      updateOne: {
+        filter: { _id: ObjectId.createFromHexString(id) },
+        update: {
+          $addToSet: { similar_words: word_id },
+        },
+      },
+    },
+    {
+      updateOne: {
+        filter: { _id: ObjectId.createFromHexString(word_id) },
+        update: {
+          $addToSet: { similar_words: id },
+        },
+      },
+    },
+  ];
 
-  try {
-    await sql`
-      INSERT INTO todos (text)
-      VALUES (${data.todo})
-    `;
-
-    revalidatePath("/");
-    return { message: `Added todo ${data.todo}` };
-  } catch (e) {
-    return { message: "Failed to create todo" };
+  const result = await collection.bulkWrite(bulkOperations);
+  if (result.matchedCount == 2) {
+    if (result.modifiedCount == 2) {
+      revalidatePath("/");
+      return { success: true, message: "Successfully Added Word" };
+    }
+    return {
+      success: false,
+      message: "That word has already been Added as similar",
+    };
   }
+  return { success: false, message: "Something went wrong" };
 }
 
-export async function deleteTodo(prevState, formData) {
-  const schema = z.object({
-    id: z.string().min(1),
-    todo: z.string().min(1),
-  });
-  const data = schema.parse({
-    id: formData.get("id"),
-    todo: formData.get("todo"),
-  });
-
-  try {
-    await sql`
-      DELETE FROM todos
-      WHERE id = ${data.id};
-    `;
-
-    revalidatePath("/");
-    return { message: `Deleted todo ${data.todo}` };
-  } catch (e) {
-    return { message: "Failed to delete todo" };
+export async function addRootWord(id, word_id) {
+  if (id === word_id) {
+    return {
+      success: false,
+      message: "Cannot add itself as root word",
+    };
   }
+  const client = await clientInstance;
+  const db = client.db("arabic-glossary");
+  const collection = db.collection("words");
+
+  const result = await collection.updateOne(
+    { _id: ObjectId.createFromHexString(id) },
+    {
+      $set: {
+        root_word: word_id,
+      },
+    }
+  );
+  if (result.matchedCount == 1) {
+    if (result.modifiedCount == 1) {
+      revalidatePath("/");
+      return { success: true, message: "Successfully Added Root Word" };
+    }
+    return {
+      success: false,
+      message: "That word has already been been set as the Root word",
+    };
+  }
+  return { success: false, message: "Something went wrong" };
 }

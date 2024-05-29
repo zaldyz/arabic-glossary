@@ -5,7 +5,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { Badge } from "./ui/badge";
+import { Badge } from "@/components/ui/badge";
 
 const getWord = async (id) => {
   let client = await clientInstance;
@@ -42,7 +42,9 @@ export default async function AdminWord({ id }) {
       <div className="flex gap-2 py-0.5">
         Translation:
         {word.translation.map((translation) => (
-          <Badge variant="secondary">{translation}</Badge>
+          <Badge key={translation} variant="secondary">
+            {translation}
+          </Badge>
         ))}
       </div>
       <div className="flex gap-2 py-0.5">

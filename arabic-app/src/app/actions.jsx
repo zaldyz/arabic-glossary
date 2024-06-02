@@ -79,3 +79,83 @@ export async function addRootWord(id, word_id) {
   }
   return { success: false, message: "Something went wrong" };
 }
+
+export async function deleteWord(id) {
+  const client = await clientInstance;
+  const db = client.db("arabic-glossary");
+  const collection = db.collection("words");
+
+  const result = await collection.deleteOne({
+    _id: ObjectId.createFromHexString(id),
+  });
+
+  if (result.deletedCount) {
+    revalidatePath("/");
+    return { success: true, message: "Word deleted successfully" };
+  } else {
+    return { success: false, message: "Something went wrong" };
+  }
+}
+
+export async function addNewWord(
+  arabic,
+  translation,
+  pronounciation,
+  tags,
+  gender
+) {
+  if (!arabic.trim() || !translation.trim() || !gender.trim()) {
+    return {
+      success: false,
+      message: "Submitted Values are not valid",
+    };
+  }
+  const regex = /^[a-zA-Z ,()]*$/;
+  if (!regex.test(translation) || !regex.test(tags)) {
+    return {
+      success: false,
+      message: "Submitted Values are not valid",
+    };
+  }
+
+  const client = await clientInstance;
+  const db = client.db("arabic-glossary");
+  const collection = db.collection("words");
+  const document = {
+    arabic: arabic.trim(),
+    pronounciation: pronounciation.trim(),
+    translation: translation
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => s),
+    tags: tags
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => s),
+    root_word: null,
+    similar_words: [],
+    gender: gender,
+  };
+
+  try {
+    const result = await collection.insertOne(document);
+    if (result.insertedId) {
+      revalidatePath("/");
+      return {
+        success: true,
+        message: "Word succesfully created",
+      };
+    } else {
+      return {
+        success: false,
+        message: "Something went wrong",
+      };
+    }
+  } catch (err) {
+    return {
+      success: false,
+      message:
+        err.code == 11000 ? "Word already exists" : "Something went wrong",
+    };
+  }
+}

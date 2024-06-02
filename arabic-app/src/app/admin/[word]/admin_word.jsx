@@ -16,7 +16,6 @@ const getWord = async (id) => {
 
 export default async function AdminWord({ id }) {
   const word = await getWord(id);
-  console.log(word);
   return (
     <div className="flex-1 space-y-1 p-4">
       <p className="text-5xl font-medium leading-none">
@@ -63,7 +62,9 @@ export default async function AdminWord({ id }) {
       </div>
       <div className="flex gap-2 py-0.5">
         Tags:
-        {word.tag && <Badge variant="secondary">{word.tag}</Badge>}
+        {word.tags.map((tag) => (
+          <Badge variant="secondary">{tag}</Badge>
+        ))}
       </div>
       <div className="flex gap-2 py-0.5">
         Root Word:

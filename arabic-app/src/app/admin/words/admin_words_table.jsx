@@ -1,7 +1,7 @@
 import clientInstance from "@/lib/mongo";
 import { DataTable } from "@/app/admin/words/data-table";
 import { columns } from "@/app/admin/words/columns";
-
+import AddNewWordButton from "./add_new_word_button";
 // Sleep function that returns a Promise
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -21,5 +21,12 @@ export default async function WordsTable() {
     word._id = word._id.toString();
     return word;
   });
-  return <DataTable columns={columns} data={data} pageSize={10} />;
+  return (
+    <DataTable
+      columns={columns}
+      data={data}
+      pageSize={10}
+      button={<AddNewWordButton />}
+    />
+  );
 }

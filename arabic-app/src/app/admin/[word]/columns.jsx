@@ -107,8 +107,20 @@ export const columns = [
     },
   },
   {
-    accessorKey: "tag",
+    accessorKey: "tags",
     header: "Tags",
+    cell: ({ row }) => {
+      const value = row.getValue("tags");
+      return (
+        <div className="flex gap-2 flex-1">
+          {value.map((tag) => (
+            <Badge key={tag} variant="secondary">
+              {tag}
+            </Badge>
+          ))}
+        </div>
+      );
+    },
   },
   {
     id: "actions",

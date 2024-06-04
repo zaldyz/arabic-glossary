@@ -5,7 +5,12 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { Badge } from "@/components/ui/badge";
+
+import RootWord from "./root_word_badge";
+import Gender from "./gender_badge";
+import Tags from "./tags_badges";
+import Translation from "./translations_badges";
+import SimilarWords from "./similar_words_badges";
 
 const getWord = async (id) => {
   let client = await clientInstance;
@@ -17,8 +22,8 @@ const getWord = async (id) => {
 export default async function AdminWord({ id }) {
   const word = await getWord(id);
   return (
-    <div className="flex-1 space-y-1 p-4">
-      <p className="text-5xl font-medium leading-none">
+    <div className="flex flex-col space-y-1 p-4">
+      <p className="text-6xl font-medium leading-none">
         <HoverCard>
           <HoverCardTrigger asChild>
             <button>{word.arabic}</button>
@@ -37,45 +42,32 @@ export default async function AdminWord({ id }) {
           </HoverCardContent>
         </HoverCard>
       </p>
-      {/* <p className="text-sm text-muted-foreground">Badges go here</p> */}
-      <div className="flex gap-2 py-0.5">
-        Translation:
-        {word.translation.map((translation) => (
-          <Badge key={translation} variant="secondary">
-            {translation}
-          </Badge>
-        ))}
+      <div className="flex flex-row gap-20">
+        <div className="flex flex-col">
+          <h2 className="scroll-m-20 pt-2 text-lg font-medium first:mt-0">
+            Translation
+          </h2>
+          <Translation className="py-0.5" translation={word.translation} />
+          <h2 className="scroll-m-20 pt-2 text-lg font-medium first:mt-0">
+            Tags
+          </h2>
+          <Tags className="py-0.5" tags={word.tags} />
+        </div>
+        <div className="flex flex-col">
+          <h2 className="scroll-m-20 pt-2 text-lg font-medium first:mt-0">
+            Gender
+          </h2>
+          <Gender className="py-0.5" gender={word.gender} />
+          <h2 className="scroll-m-20 pt-2 text-lg font-medium first:mt-0">
+            Root Word
+          </h2>
+          <RootWord className="py-0.5" root_word={word.root_word} />
+        </div>
       </div>
-      <div className="flex gap-2 py-0.5">
-        Gender:
-        <Badge
-          variant={
-            word.gender == "Masculine"
-              ? "blue"
-              : word.gender == "Feminine"
-              ? "pink"
-              : "outline"
-          }
-        >
-          {word.gender ? word.gender : "Neutral"}
-        </Badge>
-      </div>
-      <div className="flex gap-2 py-0.5">
-        Tags:
-        {word.tags.map((tag) => (
-          <Badge variant="secondary">{tag}</Badge>
-        ))}
-      </div>
-      <div className="flex gap-2 py-0.5">
-        Root Word:
-        {word.root_word && <Badge variant="secondary">{word.root_word}</Badge>}
-      </div>
-      <div className="flex gap-2 py-0.5">
-        Similar Words:
-        {word.similar_words.map((similar_word) => (
-          <Badge variant="secondary">{similar_word}</Badge>
-        ))}
-      </div>
+      <h2 className="scroll-m-20 pt-2 text-lg font-medium first:mt-0">
+        Similar Words
+      </h2>
+      <SimilarWords className="py-0.5" similar_words={word.similar_words} />
     </div>
   );
 }

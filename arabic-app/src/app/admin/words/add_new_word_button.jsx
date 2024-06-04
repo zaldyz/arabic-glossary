@@ -53,7 +53,8 @@ export default function AddNewWordButton() {
           <DialogHeader>
             <DialogTitle>Create a New Word</DialogTitle>
             <DialogDescription>
-              Add details about the word here. Click create when you're ready.
+              Add details about the word here. Click create when you&apos;re
+              ready.
             </DialogDescription>
           </DialogHeader>
           <ProfileForm />
@@ -74,7 +75,8 @@ export default function AddNewWordButton() {
         <DrawerHeader className="text-left">
           <DrawerTitle>Create a New Word</DrawerTitle>
           <DrawerDescription>
-            Add details about the word here. Click create when you're ready.
+            Add details about the word here. Click create when you&apos;re
+            ready.
           </DrawerDescription>
         </DrawerHeader>
         <ProfileForm className="px-4" />

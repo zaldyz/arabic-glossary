@@ -27,9 +27,7 @@ export default function Page({ params }) {
           <div className=" flex items-center space-x-4 rounded-md border p-4">
             <AdminWord id={params.word} />
           </div>
-          {/* <div className="container rounded-md border py-4"> */}
           <EditWordTable />
-          {/* </div> */}
         </CardContent>
         <CardFooter></CardFooter>
       </Card>

@@ -11,6 +11,7 @@ import Gender from "./gender_badge";
 import Tags from "./tags_badges";
 import Translation from "./translations_badges";
 import SimilarWords from "./similar_words_badges";
+import EditWordButton from "./edit_word_button";
 
 const getWord = async (id) => {
   let client = await clientInstance;
@@ -22,8 +23,8 @@ const getWord = async (id) => {
 export default async function AdminWord({ id }) {
   const word = await getWord(id);
   return (
-    <div className="flex flex-col space-y-1 p-4">
-      <p className="text-6xl font-medium leading-none">
+    <div className="flex flex-col space-y-1 p-4 flex-1">
+      <div className="flex justify-between items-center text-6xl font-medium leading-none">
         <HoverCard>
           <HoverCardTrigger asChild>
             <button>{word.arabic}</button>
@@ -41,7 +42,8 @@ export default async function AdminWord({ id }) {
             </div>
           </HoverCardContent>
         </HoverCard>
-      </p>
+        <EditWordButton word={word} />
+      </div>
       <div className="flex flex-row gap-20">
         <div className="flex flex-col">
           <h2 className="scroll-m-20 pt-2 text-lg font-medium first:mt-0">
@@ -64,9 +66,7 @@ export default async function AdminWord({ id }) {
           <RootWord className="py-0.5" root_word={word.root_word} />
         </div>
       </div>
-      <h2 className="scroll-m-20 pt-2 text-lg font-medium first:mt-0">
-        Similar Words
-      </h2>
+      <h2 className="scroll-m-20 pt-2 text-lg font-medium">Similar Words</h2>
       <SimilarWords className="py-0.5" similar_words={word.similar_words} />
     </div>
   );

@@ -57,7 +57,7 @@ export default function AddNewWordButton() {
               ready.
             </DialogDescription>
           </DialogHeader>
-          <ProfileForm />
+          <ProfileForm onOpenChange={setOpen} />
         </DialogContent>
       </Dialog>
     );
@@ -79,7 +79,7 @@ export default function AddNewWordButton() {
             ready.
           </DrawerDescription>
         </DrawerHeader>
-        <ProfileForm className="px-4" />
+        <ProfileForm className="px-4" onOpenChange={setOpen} />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -90,7 +90,7 @@ export default function AddNewWordButton() {
   );
 }
 
-function ProfileForm({ className }) {
+function ProfileForm({ className, onOpenChange }) {
   const [arabic, setArabic] = React.useState("");
   const [translation, setTranslation] = React.useState("");
   const [tags, setTags] = React.useState("");
@@ -167,7 +167,14 @@ function ProfileForm({ className }) {
           </SelectContent>
         </Select>
       </div>
-      <Button type="submit" disabled={isPending} onClick={onClick}>
+      <Button
+        type="submit"
+        disabled={isPending}
+        onClick={() => {
+          onClick();
+          onOpenChange(false);
+        }}
+      >
         Create
       </Button>
     </form>

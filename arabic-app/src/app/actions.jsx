@@ -159,3 +159,60 @@ export async function addNewWord(
     };
   }
 }
+
+export async function EditWord(
+  id,
+  arabic,
+  translation,
+  pronounciation,
+  tags,
+  gender
+) {
+  if (!arabic.trim() || !translation.trim() || !gender.trim()) {
+    return {
+      success: false,
+      message: "Submitted Values are not valid",
+    };
+  }
+  const regex = /^[a-zA-Z ,()]*$/;
+  if (!regex.test(translation) || !regex.test(tags)) {
+    return {
+      success: false,
+      message: "Submitted Values are not valid",
+    };
+  }
+
+  const client = await clientInstance;
+  const db = client.db("arabic-glossary");
+  const collection = db.collection("words");
+  const document = {
+    arabic: arabic.trim(),
+    pronounciation: pronounciation.trim(),
+    translation: translation
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => s),
+    tags: tags
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => s),
+    gender: gender,
+  };
+
+  const result = await collection.updateOne(
+    { _id: ObjectId.createFromHexString(id) },
+    { $set: document }
+  );
+
+  if (result.matchedCount == 1) {
+    if (result.modifiedCount == 1) {
+      revalidatePath("/");
+      return { success: true, message: "Successfully Edited Word" };
+    }
+    return {
+      success: false,
+      message: "None of the fields were modified",
+    };
+  }
+  return { success: false, message: "Something went wrong" };
+}

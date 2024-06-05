@@ -1,8 +1,9 @@
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
-export default function Gender({ gender }) {
+export default function Gender({ gender, className }) {
   return (
-    <div className="flex gap-2">
+    <div className={cn("flex gap-2", className)}>
       <Badge
         variant={
           gender == "Masculine"

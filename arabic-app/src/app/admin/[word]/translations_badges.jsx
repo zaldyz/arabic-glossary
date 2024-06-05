@@ -1,8 +1,9 @@
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
-export default function Translation({ translation }) {
+export default function Translation({ translation, className }) {
   return (
-    <div className="flex gap-2">
+    <div className={cn("flex gap-2", className)}>
       {translation.map((translation) => (
         <Badge key={translation} variant="secondary">
           {translation}

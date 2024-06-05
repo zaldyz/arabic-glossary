@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import clientInstance from "@/lib/mongo";
 import { ObjectId } from "mongodb";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const getWords = async (ids) => {
   if (!ids) {
@@ -15,10 +16,10 @@ const getWords = async (ids) => {
     .toArray();
 };
 
-export default async function SimilarWords({ similar_words }) {
+export default async function SimilarWords({ similar_words, className }) {
   const words = await getWords(similar_words);
   return (
-    <div className="flex gap-2">
+    <div className={cn("flex gap-2", className)}>
       {words.length ? (
         words.map((similar_word) => (
           <Link href={`/admin/${similar_word._id}`}>

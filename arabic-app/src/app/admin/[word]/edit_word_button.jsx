@@ -3,7 +3,6 @@ import * as React from "react";
 import { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/app/hooks/use_media_query";
 import { EditWord } from "@/app/actions";
 import { toast } from "sonner";
@@ -45,7 +44,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 export default function EditWordButton({ word }) {
   const [open, setOpen] = React.useState(false);
@@ -233,7 +231,7 @@ function ProfileForm({ className, word, onOpenChange }) {
           )}
         />
         <Button onClick={() => onOpenChange(false)} type="submit">
-          Submit
+          Save
         </Button>
       </form>
     </Form>

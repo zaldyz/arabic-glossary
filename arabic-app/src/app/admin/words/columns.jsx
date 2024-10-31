@@ -191,7 +191,12 @@ export const columns = [
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <DeleteWordButton id={word._id}>Confirm</DeleteWordButton>
+              <DeleteWordButton
+                id={word._id}
+                similar_words={word.similar_words}
+              >
+                Confirm
+              </DeleteWordButton>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

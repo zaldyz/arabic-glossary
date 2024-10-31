@@ -80,14 +80,51 @@ export async function addRootWord(id, word_id) {
   return { success: false, message: "Something went wrong" };
 }
 
-export async function deleteWord(id) {
+export async function deleteWord(id, similar_words) {
   const client = await clientInstance;
   const db = client.db("arabic-glossary");
   const collection = db.collection("words");
 
-  const result = await collection.deleteOne({
-    _id: ObjectId.createFromHexString(id),
-  });
+  // Create the bulk operations
+  const bulkOperations = [
+    {
+      deleteOne: {
+        filter: {
+          _id: ObjectId.createFromHexString(id),
+        },
+      },
+    },
+    {
+      updateMany: {
+        filter: {
+          _id: {
+            $in: similar_words.map((word_id) =>
+              ObjectId.createFromHexString(word_id)
+            ),
+          },
+        },
+        update: {
+          $pull: {
+            similar_words: id,
+          },
+        },
+      },
+    },
+    {
+      updateMany: {
+        filter: {
+          root_word: id,
+        },
+        update: {
+          $set: {
+            root_word: null,
+          },
+        },
+      },
+    },
+  ];
+
+  const result = await collection.bulkWrite(bulkOperations);
 
   if (result.deletedCount) {
     revalidatePath("/");

@@ -167,7 +167,7 @@ export const columns = [
                 <Clipboard className="h-3 w-3 ml-2" />
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <Link href={`/admin/${word._id}`} asChild>
+              <Link href={`/word/${word._id}`} asChild>
                 <DropdownMenuItem className="flex justify-between items-center hover:cursor-pointer">
                   Edit Word
                   <Pencil className="h-3 w-3 ml-2" />

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 
 import {
   flexRender,
@@ -39,6 +40,7 @@ import { ChevronDown } from "lucide-react";
 // }
 
 export function DataTable({ columns, data, pageSize, button }) {
+  const router = useRouter();
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({
     similar_words: false, //hide these columns by default
@@ -130,6 +132,9 @@ export function DataTable({ columns, data, pageSize, button }) {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
+                  onClick={() => {
+                    router.push(`/word/${row.original._id}`);
+                  }}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >

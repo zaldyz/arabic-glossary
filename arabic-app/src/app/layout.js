@@ -61,13 +61,13 @@ export default function RootLayout({ children }) {
                   </nav>
                 </div>
                 <div className="ml-auto flex items-center space-x-4">
-                  <div>
+                  {/* <div>
                     <Input
                       type="search"
                       placeholder="Search for a Word..."
                       className="md:w-[100px] lg:w-[300px]"
                     />
-                  </div>
+                  </div> */}
                   <ModeToggle />
                 </div>
               </div>

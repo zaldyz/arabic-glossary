@@ -5,6 +5,11 @@ import clientInstance from "@/lib/mongo";
 import { ObjectId } from "mongodb";
 
 export async function addSimilarWord(id, word_id) {
+  // TEMPORARY TO DEPLOY
+  return {
+    success: false,
+    message: "Permission Denied",
+  };
   if (id === word_id) {
     return {
       success: false,
@@ -49,6 +54,11 @@ export async function addSimilarWord(id, word_id) {
 }
 
 export async function addRootWord(id, word_id) {
+  // TEMPORARY TO DEPLOY
+  return {
+    success: false,
+    message: "Permission Denied",
+  };
   if (id === word_id) {
     return {
       success: false,
@@ -81,6 +91,11 @@ export async function addRootWord(id, word_id) {
 }
 
 export async function deleteWord(id, similar_words) {
+  // TEMPORARY TO DEPLOY
+  return {
+    success: false,
+    message: "Permission Denied",
+  };
   const client = await clientInstance;
   const db = client.db("arabic-glossary");
   const collection = db.collection("words");
@@ -141,6 +156,11 @@ export async function addNewWord(
   tags,
   gender
 ) {
+  // TEMPORARY TO DEPLOY
+  return {
+    success: false,
+    message: "Permission Denied",
+  };
   if (!arabic.trim() || !translation.trim() || !gender.trim()) {
     return {
       success: false,
@@ -205,6 +225,12 @@ export async function EditWord(
   tags,
   gender
 ) {
+  // TEMPORARY TO DEPLOY
+  return {
+    success: false,
+    message: "Permission Denied",
+  };
+
   if (!arabic.trim() || !translation.trim() || !gender.trim()) {
     return {
       success: false,

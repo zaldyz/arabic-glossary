@@ -3,6 +3,9 @@
 import { revalidatePath } from "next/cache";
 import clientInstance from "@/lib/mongo";
 import { ObjectId } from "mongodb";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../lib/authOptions";
+import { boolean } from "zod";
 
 export async function addSimilarWord(id, word_id) {
   // TEMPORARY TO DEPLOY
@@ -157,10 +160,18 @@ export async function addNewWord(
   gender
 ) {
   // TEMPORARY TO DEPLOY
-  return {
-    success: false,
-    message: "Permission Denied",
-  };
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return {
+      success: false,
+      message: "Permission Denied",
+    };
+  } else {
+    return {
+      success: true,
+      message: `logged in as ${session.user.name}`,
+    };
+  }
   if (!arabic.trim() || !translation.trim() || !gender.trim()) {
     return {
       success: false,

@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -14,6 +15,17 @@ import { Label } from "@/components/ui/label";
 import { signIn } from "next-auth/react";
 
 export function LoginForm({ className, ...props }) {
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await signIn("credentials", {
+      username,
+      password,
+      redirect: true,
+      callbackUrl: "/",
+    });
+  };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -23,7 +35,7 @@ export function LoginForm({ className, ...props }) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
                 <Button
@@ -89,13 +101,27 @@ export function LoginForm({ className, ...props }) {
               <div className="grid gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="email">Username</Label>
-                  <Input id="username" type="text" required />
+                  <Input
+                    id="username"
+                    type="text"
+                    required
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                    }}
+                  />
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input
+                    id="password"
+                    type="password"
+                    required
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                  />
                 </div>
                 <Button type="submit" className="w-full">
                   Login
